@@ -31,5 +31,4 @@ module.exports = WillowComponent.extend({
 	run: function(e, resolve, reject) {
 		resolve({success: true});
 	}
-})
-.build();
+});

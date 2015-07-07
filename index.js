@@ -1,6 +1,5 @@
 require('node-jsx').install({extension: '.jsx'});
 GLOBAL.React = require('react');
-GLOBAL.willow_server = true;
 var http = require('http');
 var express = require('express');
 var path = require('path');

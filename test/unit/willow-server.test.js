@@ -34,7 +34,14 @@ describe('willow-server', function() {
 				done();
 			});
 		});
-		// @todo test valid call
+		it('should return run successfully for valid parameters.', function (done) {
+			request.post('http://localhost:3000/component/test/baz/b2', function(err, res, body) {
+				expect(res.statusCode).to.equal(200);
+				var json = JSON.parse(body);
+				expect(json.b2).to.deep.equal({ success: true });
+				done();
+			});
+		});
 	});
 
 	describe('other', function() {

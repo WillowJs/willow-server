@@ -32,7 +32,7 @@ module.exports = function(options) {
 				'NOCOMPONENT'
 			)).send(res);
 		}
-		if(!_.isFunction(components[component])) {
+		if(!_.isObject(components[component]) || !components[component].build || !components[component].run) {
 			return (new WillowError(
 				'{{component}} is not a component.',
 				{component: component},

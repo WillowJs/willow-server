@@ -2,6 +2,7 @@ var WillowServer = require('../../index.js');
 var TestUtils = require('react/addons').addons.TestUtils;
 var path = require('path');
 var request = require('request');
+var App = require('../fixtures/components/test');
 
 describe('willow-server', function() {
 
@@ -9,7 +10,8 @@ describe('willow-server', function() {
 		var server = new WillowServer({
 			componentNamespace: 'component',
 			componentDir: path.join(__dirname, '../fixtures/components'),
-			port: 3000
+			port: 3000,
+			app: App
 		});
 	});
 
@@ -46,9 +48,10 @@ describe('willow-server', function() {
 
 	describe('other', function() {
 		it('should return 200', function (done) {
-			request('http://localhost:3000', function(err, res, body) {
-				expect(res.statusCode).to.equal(404);
-				expect(body).to.equal('{"message":"Not found","params":{},"status":404}');
+			request('http://localhost:3000/hello/world?face=book&foo=bar#wasf', function(err, res, body) {
+				expect(body).to.have.string('<!DOCTYPE html>');
+				expect(body).to.match(/.*<div id="app">.*<\/div>/);
+				expect(body).to.match(/.*<h1.*test<\/h1>/);
 				done();
 			});
 		});

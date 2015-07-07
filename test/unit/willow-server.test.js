@@ -34,26 +34,7 @@ describe('willow-server', function() {
 				done();
 			});
 		});
-		// it('should return an error for components that are invalid.', function (done) {
-		// 	request('http://localhost:3000/component/bad2/event/handler', function(err, res, body) {
-		// 		expect(res.statusCode).to.equal(500);
-		// 		var json = JSON.parse(body);
-		// 		expect(json.id).to.equal('BADCOMPONENT');
-		// 		expect(json.message).to.equal('{{component}} has no willow property.');
-		// 		expect(json.params.component).to.equal('bad2');
-		// 		done();
-		// 	});
-		// });
-		// it('should return an error for components that are invalid.', function (done) {
-		// 	request('http://localhost:3000/component/noevent/event/handler', function(err, res, body) {
-		// 		expect(res.statusCode).to.equal(404);
-		// 		var json = JSON.parse(body);
-		// 		expect(json.id).to.equal('NOEVENT');
-		// 		expect(json.message).to.equal('{{component}} has no events.');
-		// 		expect(json.params.component).to.equal('bad2');
-		// 		done();
-		// 	});
-		// });
+		// @todo test valid call
 	});
 
 	describe('other', function() {
@@ -64,5 +45,6 @@ describe('willow-server', function() {
 				done();
 			});
 		});
+		// @todo test valid call
 	});
 });

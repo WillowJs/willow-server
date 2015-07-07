@@ -27,90 +27,25 @@ module.exports = function(options) {
 		if(!components.hasOwnProperty(component)) {
 			return (new WillowError(
 				'{{component}} not found.',
+				{component: component},
 				404,
-				'NOCOMPONENT',
-				{component: component}
+				'NOCOMPONENT'
 			)).send(res);
 		}
 		if(!_.isFunction(components[component])) {
 			return (new WillowError(
 				'{{component}} is not a component.',
+				{component: component},
 				404,
-				'NOCOMPONENT',
-				{component: component}
+				'NOCOMPONENT'
 			)).send(res);
 		}
 
-		var newComponent = new components[component]();
-
-		if(!newComponent.willow || !_.isObject(newComponent.willow)) {
-			return (new WillowError(
-				'{{component}} has no willow property.',
-				500,
-				'BADCOMPONENT',
-				{component: component}
-			)).send(res);
-		}
-
-		var willow = newComponent.willow;
-
-		if(!willow.events || !_.isObject(willow.events)) {
-			return (new WillowError(
-				'{{component}} has no events.',
-				404,
-				'NOEVENT',
-				{component: component}
-			)).send(res);
-		}
-
-		var handlers = willow.events.handlers;
-
-		if(!handlers || !_.isObject(handlers)) {
-			return (new WillowError(
-				'{{component}} has no handlers.',
-				404,
-				'NOHANDLER',
-				{component: component}
-			)).send(res);
-		}
-
-		if(!handlers[eventName] || !_.isObject(handlers[eventName])) {
-			return (new WillowError(
-				'{{component}} has no handler for {{event}}.',
-				404,
-				'NOHANDLER',
-				{component: component, event: eventName}
-			)).send(res);
-		}
-
-		var handlerModel = handlers[eventName].handler;
-
-		if(!handlerModel) {
-			return (new WillowError(
-				'{{component}} has no handler for {{event}}/{{handler}}.',
-				404,
-				'NOHANDLER',
-				{component: component, event: eventName, handler: handler}
-			)).send(res);
-		}
-
-		// We probably don't need to check validation here
-		// if(!handlerModel.isValid()) {
-		// 	return reject(error(component+'/'+eventName+'/'+handler+' is not a valid handler: '+handlerModel.validationError, 500, 'BADHANDLER'));
-		// }
-
-		if(handlerModel.method === 'local') {
-			return (new WillowError(
-				'{{component}}/{{event}}/{{handler}} is a local handler.',
-				400,
-				'LOCALHANDLER',
-				{component: component, event: eventName, handler: handler}
-			)).send(res);
-		}
-
-		var run = handlerModel.run;
-		return run(
+		components[component].run(
+			eventName,
+			handler,
 			eventObj,
+			req.method,
 			// Resolve 
 			function(data) {
 				res.json(data);
@@ -129,7 +64,6 @@ module.exports = function(options) {
 				}
 			}
 		);
-
 	};
 };
 

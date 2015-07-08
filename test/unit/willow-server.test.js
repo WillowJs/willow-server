@@ -47,11 +47,18 @@ describe('willow-server', function() {
 	});
 
 	describe('other', function() {
-		it('should return 200', function (done) {
+		it('should return 200 status code when /hello/world is called', function (done) {
 			request('http://localhost:3000/hello/world?face=book&foo=bar#wasf', function(err, res, body) {
+				expect(res.statusCode).to.equal(200);
 				expect(body).to.have.string('<!DOCTYPE html>');
 				expect(body).to.match(/.*<div id="app">.*<\/div>/);
 				expect(body).to.match(/.*<h1.*test<\/h1>/);
+				done();
+			});
+		});
+		it('should return 404 status code when /hello/world is not called', function (done) {
+			request('http://localhost:3000/hello/world2?face=book&foo=bar#wasf', function(err, res, body) {
+				expect(res.statusCode).to.equal(404);
 				done();
 			});
 		});

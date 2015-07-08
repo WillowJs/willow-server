@@ -8,6 +8,19 @@ module.exports = WillowComponent.extend({
 		console.log('bar');
 	}
 })
+.metadata(function(url) {
+	var metadata = {
+		title: 'Unknown',
+		status: 404
+	};
+
+	if(url.pathname === '/hello/world') {
+		metadata.status = 200;
+		metadata.title = 'Hello World!'
+	}
+
+	return metadata;
+})
 .on('baz', {
 	name: 'b1',
 	method: 'local',

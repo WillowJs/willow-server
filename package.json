@@ -1,5 +1,5 @@
 {
-  "name": "willow-component",
+  "name": "willow-server",
   "version": "1.0.0",
   "description": "A node http server designed to isomorphically server willow components.",
   "main": "index.js",

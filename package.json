@@ -1,7 +1,7 @@
 {
   "name": "willow-server",
   "version": "1.0.0",
-  "description": "A node http server designed to isomorphically server willow components.",
+  "description": "A node http server designed to isomorphically serve willow components.",
   "main": "index.js",
   "scripts": {
     "test": "./node_modules/mocha/bin/mocha --recursive --reporter spec --compilers jsx:babel/register,js:babel/register test/setup.js test/unit/**"

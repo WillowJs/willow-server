@@ -31,8 +31,13 @@ module.exports = function(options) {
 
 	var app = express();
 
-	app.engine('.hbs', exphbs({extname: '.hbs', defaultLayout: 'layout'}));
+	app.engine('.hbs', exphbs({
+		extname: '.hbs',
+		defaultLayout: 'layout',
+		layoutDir: path.join(__dirname, 'views/layouts')
+	}));
 	app.set('view engine', '.hbs');
+	app.set('view', path.join(__dirname, 'views'));
 
 	var componentRoute = path.join(
 		'/',

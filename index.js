@@ -34,10 +34,10 @@ module.exports = function(options) {
 	app.engine('.hbs', exphbs({
 		extname: '.hbs',
 		defaultLayout: 'layout',
-		layoutDir: path.join(__dirname, 'views/layouts')
+		layoutsDir: path.join(__dirname, 'views/layouts')
 	}));
 	app.set('view engine', '.hbs');
-	app.set('view', path.join(__dirname, 'views'));
+	app.set('views', path.join(__dirname, 'views'));
 
 	var componentRoute = path.join(
 		'/',

@@ -13,6 +13,7 @@ var component = require('./routes/component');
 var other = require('./routes/other');
 
 module.exports = function(options) {
+	var self = this;
 	if(!options.app) {
 		throw new WillowError(
 			'Willow components requires an options object with an app property specifying the main app component.',
@@ -26,18 +27,24 @@ module.exports = function(options) {
 		componentNamespace: 'component',
 		port: 3000,
 		host: '127.0.0.1',
-		componentDir: './components'
+		componentDir: './components',
+		beforeMiddleware: [],
+		afterMiddleware: []
 	}, options);
 
-	var app = express();
+	this.app = express();
 
-	app.engine('.hbs', exphbs({
+	this.app.engine('.hbs', exphbs({
 		extname: '.hbs',
 		defaultLayout: 'layout',
 		layoutsDir: path.join(__dirname, 'views/layouts')
 	}));
-	app.set('view engine', '.hbs');
-	app.set('views', path.join(__dirname, 'views'));
+	this.app.set('view engine', '.hbs');
+	this.app.set('views', path.join(__dirname, 'views'));
+
+	options.beforeMiddleware.forEach(function(mw) {
+		self.app.use(mw);
+	});
 
 	var componentRoute = path.join(
 		'/',
@@ -47,14 +54,14 @@ module.exports = function(options) {
 		':handler'
 	);
 
-	app.use(componentRoute, component({componentDir: options.componentDir}));
-	app.get('/*', other({app: options.app}));
+	this.app.use(componentRoute, component({componentDir: options.componentDir}));
+	this.app.get('/*', other({app: options.app}));
 
 	// error handlers
 	// development error handler
 	// will print stacktrace
-	if (app.get('env') === 'development') {
-		app.use(function(err, req, res, next) {
+	if (this.app.get('env') === 'development') {
+		this.app.use(function(err, req, res, next) {
 			res.status(err.status || 500);
 			res.render('error', {
 				message: err.message,
@@ -65,7 +72,7 @@ module.exports = function(options) {
 
 	// production error handler
 	// no stacktraces leaked to user
-	app.use(function(err, req, res, next) {
+	this.app.use(function(err, req, res, next) {
 		res.status(err.status || 500);
 		res.render('error', {
 		  message: err.message,
@@ -73,5 +80,9 @@ module.exports = function(options) {
 		});
 	});
 
-	http.createServer(app).listen(options.port, options.host);
+	options.afterMiddleware.forEach(function(mw) {
+		self.app.use(mw);
+	});
+
+	http.createServer(this.app).listen(options.port, options.host);
 };

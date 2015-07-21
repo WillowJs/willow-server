@@ -1,5 +1,5 @@
+'use strict';
 var WillowServer = require('../../index.js');
-var TestUtils = require('react/addons').addons.TestUtils;
 var path = require('path');
 var request = require('request');
 var App = require('../fixtures/components/test');

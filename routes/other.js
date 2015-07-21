@@ -1,9 +1,8 @@
-var WillowError = require('willow-error');
+'use strict';
 var React = require('react');
 var url = require('url');
-var _ = require('lodash');
 module.exports = function(options) {
-	var AppComponent = options.app.build();
+	var AppComponent = options.app;
 
 	return function(req, res) {
 
@@ -13,7 +12,7 @@ module.exports = function(options) {
 		var params = options.app.metadata(u);
 		params.params = JSON.stringify(params);
 		params.body = React.renderToString(<AppComponent url={u} />).trim();
-		params.url = JSON.stringify(u)
+		params.url = JSON.stringify(u);
 
 		res.status(params.status || 200).render('index', params);
 	};

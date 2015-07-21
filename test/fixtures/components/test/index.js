@@ -1,6 +1,7 @@
-var WillowComponent = require('willow-component');
+'use strict';
+var Willow = require('willow-component');
 
-module.exports = WillowComponent.extend({
+module.exports = Willow.createClass({
 	render: function() {
 		return (<h1>test</h1>);
 	},
@@ -16,7 +17,7 @@ module.exports = WillowComponent.extend({
 
 	if(url.pathname === '/hello/world') {
 		metadata.status = 200;
-		metadata.title = 'Hello World!'
+		metadata.title = 'Hello World!';
 	}
 
 	return metadata;

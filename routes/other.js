@@ -9,12 +9,13 @@ module.exports = function(options) {
 		var fullUrl = req.protocol+'://'+req.get('host')+req.url;
 		var u = url.parse(fullUrl);
 
-		var params = options.app.metadata(u);
+		var params = {};
+		params.metadata = options.app.metadata(u);
 		params.params = JSON.stringify(params);
 		params.body = React.renderToString(<AppComponent url={u} />).trim();
 		params.url = JSON.stringify(u);
 
-		res.status(params.status || 200).render('index', params);
+		res.status(params.metadata.status || 200).render('index', params);
 	};
 
 };

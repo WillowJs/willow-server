@@ -1,8 +1,9 @@
+'use strict';
 require('node-jsx').install();
 GLOBAL.React = require('react');
 var http = require('http');
 var express = require('express');
-var exphbs  = require('express-handlebars');
+var exphbs = require('express-handlebars');
 var path = require('path');
 var _ = require('lodash');
 var WillowError = require('willow-error');
@@ -75,8 +76,8 @@ module.exports = function(options) {
 	this.app.use(function(err, req, res, next) {
 		res.status(err.status || 500);
 		res.render('error', {
-		  message: err.message,
-		  error: {}
+			message: err.message,
+			error: {}
 		});
 	});
 

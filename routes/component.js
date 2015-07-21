@@ -1,3 +1,4 @@
+'use strict';
 var path = require('path');
 var fs = require('fs');
 var _ = require('lodash');
@@ -46,7 +47,7 @@ module.exports = function(options) {
 			handler,
 			eventObj,
 			req.method,
-			// Resolve 
+			// Resolve
 			function(data) {
 				res.json(data);
 			},

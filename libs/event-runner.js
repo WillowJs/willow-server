@@ -1,3 +1,5 @@
+'use strict';
+
 var _ = require('lodash');
 var underscoreDeepExtend = require('underscore-deep-extend');
 _.mixin({deepExtend: underscoreDeepExtend(_)});
@@ -21,10 +23,10 @@ module.exports = function(handler, eventObj) {
 			self,
 			eventObjCopy,
 			function(data) {	// resolve
-				cb(null, data)
+				cb(null, data);
 			},
 			function(err) {	// reject
-				cb(err)
+				cb(err);
 			}
 		);
 	});

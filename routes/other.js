@@ -10,7 +10,7 @@ module.exports = function(options) {
 		var u = url.parse(fullUrl);
 
 		var params = {};
-		params.metadata = options.app.metadata(u) || {};
+		params.metadata = options.app.getMetadata(u) || {};
 		params.params = JSON.stringify(params);
 		params.body = React.renderToString(<AppComponent url={u} />).trim();
 		params.url = JSON.stringify(u);

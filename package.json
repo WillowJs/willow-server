@@ -32,6 +32,7 @@
     "react": "^0.13.3",
     "underscore-deep-extend": "0.0.5",
     "willow-component": "willowjs/willow-component",
+    "willow-context": "willowjs/willow-context",
     "willow-error": "willowjs/willow-error"
   },
   "devDependencies": {

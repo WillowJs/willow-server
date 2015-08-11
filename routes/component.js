@@ -3,6 +3,7 @@ var path = require('path');
 var fs = require('fs');
 var _ = require('lodash');
 var WillowError = require('willow-error');
+var context = require('willow-context');
 
 module.exports = function(options) {
 
@@ -14,7 +15,21 @@ module.exports = function(options) {
 		files.forEach(function(file) {
 			var filepath = path.join(options.componentDir, file);
 			if(fs.statSync(filepath).isDirectory()) {
-				components[file] = require(filepath);
+				var ComponentClass = require(filepath);
+				if(!ComponentClass.prototype || !ComponentClass.prototype._willow) {
+					components[file] = false;
+					return;
+				}
+
+				var state = ComponentClass.prototype._willow;
+				var contextObj = state.getContext();
+				var config = context(contextObj.config, 'server');
+				var requires = context(contextObj.requires, 'server');
+
+				state.setRequires(requires);
+				state.setConfig(config);
+
+				components[file] = ComponentClass;
 			}
 		});
 	}
@@ -33,6 +48,7 @@ module.exports = function(options) {
 				'NOCOMPONENT'
 			)).send(res);
 		}
+
 		if(!_.isObject(components[component]) || !components[component].run) {
 			return (new WillowError(
 				'{{component}} is not a component.',
@@ -67,47 +83,3 @@ module.exports = function(options) {
 		);
 	};
 };
-
-// module.exports = function(component, eventName, handler, eventObj, resolve, reject) {
-// 	if(!components.hasOwnProperty(component)) return false;
-// 	if(!_.isFunction(components[component])) {
-// 		return reject(error(component+' is not a component', 404, 'NOCOMPONENT'));
-// 	}
-// 	var newComponent = new components[component]();
-
-// 	if(!newComponent.willow || !_.isObject(newComponent.willow)) {
-// 		return reject(error(component+' has no willow property', 500, 'BADCOMPONENT'));
-// 	}
-
-// 	var willow = newComponent.willow;
-
-// 	if(!willow.events || !_.isObject(willow.events)) {
-// 		return reject(error(component+' has no events', 404, 'NOEVENT'));
-// 	}
-
-// 	var handlers = willow.events.handlers;
-
-// 	if(!handlers || !_.isObject(handlers)) {
-// 		return reject(error(component+' has no handlers', 404, 'NOHANDLER'));
-// 	}
-
-// 	if(!handlers[eventName] || !_.isObject(handlers[eventName])) {
-// 		return reject(error(component+' has no handler for '+eventName, 404, 'NOHANDLER'));
-// 	}
-
-// 	var handlerModel = handlers[eventName].get(handler);
-// 	if(!handlerModel) {
-// 		return reject(error(component+' has no handler for '+eventName+'/'+handler, 404, 'NOHANDLER'));
-// 	}
-
-// 	if(!handlerModel.isValid()) {
-// 		return reject(error(component+'/'+eventName+'/'+handler+' is not a valid handler: '+handlerModel.validationError, 500, 'BADHANDLER'));
-// 	}
-
-// 	if(handlerModel.get('method') === 'local') {
-// 		return reject(error(component+'/'+eventName+'/'+handler+' is a local handler', 400, 'LOCALHANDLER'));
-// 	}
-
-// 	var run = handlerModel.get('run');
-// 	return run(eventObj, resolve, reject);
-// };

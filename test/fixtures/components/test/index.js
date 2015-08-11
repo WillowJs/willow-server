@@ -9,6 +9,9 @@ module.exports = Willow.createClass({
 		console.log('bar');
 	}
 })
+.require('_server', 'lodash', 'server')
+.require('_client', 'lodash', 'client')
+.require('_both', 'lodash', 'both')
 .metadata(function(url) {
 	var metadata = {
 		title: 'Unknown',
@@ -44,5 +47,17 @@ module.exports = Willow.createClass({
 	dependencies: ['b1', 'b2'],
 	run: function(e, resolve, reject) {
 		resolve({success: true});
+	}
+})
+.on('test', {
+	name: 'requires',
+	method: 'get',
+	dependencies: [],
+	run: function(e, resolve, reject) {;
+		resolve({
+			_client: this.require._client ? true : false,
+			_server: this.require._server ? true : false,
+			_both: this.require._both ? true : false
+		});
 	}
 });

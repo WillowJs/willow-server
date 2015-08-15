@@ -34,6 +34,7 @@ module.exports = function(options) {
 	}, options);
 
 	this.app = express();
+	this.app.disable('x-powered-by');
 
 	this.app.engine('.hbs', exphbs({
 		extname: '.hbs',

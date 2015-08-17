@@ -4,7 +4,6 @@ var fs = require('fs');
 var _ = require('lodash');
 var WillowError = require('willow-error');
 var context = require('willow-context');
-var path = require('path');
 
 module.exports = function(options) {
 
@@ -27,11 +26,10 @@ module.exports = function(options) {
 				var config = context(contextObj.config, 'server');
 				var moduleInfo = context(contextObj.requires, 'server');
 				var requires = {};
-				var dir = ComponentClass.getDir();
 
 				for(var i in moduleInfo) {
 					if(moduleInfo[i].charAt(0) === '.'){
-						requires[i] = require(path.join(dir, moduleInfo[i]));
+						requires[i] = require(path.join(filepath, moduleInfo[i]));
 					}
 					else {
 						requires[i] = require(moduleInfo[i]);
